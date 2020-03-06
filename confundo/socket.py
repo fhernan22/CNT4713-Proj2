@@ -64,11 +64,7 @@ class Socket:
 
         pkt = self.ostream.makeNextPacket(connId=0, payload=b"", isSyn=True)
 
-        print("+++++++pkt++++++++++")
-        print(pkt)
-        print("+++++++pkt++++++++++")
-
-        # self._send(pkt)
+        self._send(pkt)
 
     def canSendData(self):
         return self.ostream.canSendNewData()

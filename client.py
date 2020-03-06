@@ -30,33 +30,34 @@ except (socket.error, OverflowError) as e:
 # send "connect" (not fully connected yet)
 conn.connect(sockaddr)
 
-# while True:
-#     try:
-#         (inPacket, fromAddr) = sock.recvfrom(1024)
-#         # Note in the above, parameter to .recvfrom should be at least MTU+12 (524), but can be anything else larger if we are willing to accept larger packets
+while True:
+    try:
+        (inPacket, fromAddr) = sock.recvfrom(1024)
+        # Note in the above, parameter to .recvfrom should be at least MTU+12 (524), but can be anything else larger if we are willing to accept larger packets
 
-#         # Process incoming packet
-#         conn.on_receive(inPacket)
+        # Process incoming packet
+        conn.on_receive(inPacket)
 
-#         # Process any retransmissions
-#         conn.process_retransmissions()
+        # Process any retransmissions
+        # conn.process_retransmissions()
 
-#     except socket.error as e:
-#         # this is the source of timeouts
-#         isError = conn.on_timeout()
-#         if isError:
-#             # on_timout should return True on critical timeout
-#             sys.stderr.write("ERROR: (%s)\n" % e)
-#             sys.exit(1)
-#         if conn.isClosed():
-#             break
+    except socket.error as e:
+        # this is the source of timeouts
+        isError = conn.on_timeout()
+        if isError:
+            # on_timout should return True on critical timeout
+            sys.stderr.write("ERROR: (%s)\n" % e)
+            sys.exit(1)
+        if conn.isClosed():
+            break
+        
 
-#     while file and conn.canSendData():
-#         data = file.read(confundo.MTU)
-#         if not data:
-#             file = None
-#             break
-#         conn.send(data)
+    while file and conn.canSendData():
+        data = file.read(confundo.MTU)
+        if not data:
+            file = None
+            break
+        conn.send(data)
 
-#     if not file and conn.canSendData():
-#         conn.close()
+    if not file and conn.canSendData():
+        conn.close()
