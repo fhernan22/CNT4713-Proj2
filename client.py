@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import argparse
 import socket
@@ -15,7 +17,6 @@ file = open(args.file, "rb")
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 conn = confundo.Socket(sock)
-
 try:
     remote = socket.getaddrinfo(args.host, args.port, family=socket.AF_INET, type=socket.SOCK_DGRAM)
 except (socket.error, OverflowError) as e:
@@ -24,8 +25,6 @@ except (socket.error, OverflowError) as e:
     sys.exit(1)
 
 (family, type, proto, canonname, sockaddr) = remote[0]
-
-#print(family, type, proto, canonname, sockaddr)
 
 # send "connect" (not fully connected yet)
 conn.connect(sockaddr)
@@ -39,7 +38,7 @@ while True:
         conn.on_receive(inPacket)
 
         # Process any retransmissions
-        # conn.process_retransmissions()
+        conn.process_retransmissions()
 
     except socket.error as e:
         # this is the source of timeouts
@@ -50,7 +49,6 @@ while True:
             sys.exit(1)
         if conn.isClosed():
             break
-        
 
     while file and conn.canSendData():
         data = file.read(confundo.MTU)

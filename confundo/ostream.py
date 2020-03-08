@@ -1,5 +1,3 @@
-# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
-
 from .common import *
 from .packet import Packet
 from .cwnd_control import CwndControl
@@ -37,11 +35,10 @@ class Ostream:
         pass
 
     def makeNextPacket(self, connId, payload, isSyn=False, isFin=False, **kwargs):
-        if isSyn == True:
-            self.seqNum = 42
-            packet = Packet(seqNum=self.seqNum)
-
-        return packet
+        ###
+        ### IMPLEMENT
+        ###
+        pass
 
     def hasBufferedData(self):
         ###
